@@ -22,6 +22,7 @@
   (swap! action-state #(update % :selections conj selection)))
 
 (defn action-click! [action-state type]
+  (swap! action-state #(dissoc % :error))
   (swap! action-state #(assoc % :type type)))
 
 (defmulti advance
@@ -64,6 +65,6 @@
      state-map
      (if (:error new-state-map)
        (-> (deref-state-map state-map)
-           (update-in [:action-state :error] (constantly (:error new-state-map)))
-           (update :action-state {}))
+           (update :action-state {})
+           (update-in [:action-state :error] (constantly (:error new-state-map))))
        new-state-map))))

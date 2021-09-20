@@ -37,15 +37,17 @@
     [:tr
      [:td {:id "title"} "Devil's Grip Solitare"]]
     [:tr
-     [:td {:id "help"
-           :style {:font-style "italic"}}
-      (help/help action-state)]]
-    [:tr
      [:td {:id "board"}
       (board/board
        (fn [] (actions/advance! state-map))
        (partial actions/selection-click! action-state)
-       board-state)]]
+       board-state)]
+     [:td {:id "help"
+           :style {:font-style "italic" :color "blue"}}
+      (help/help action-state)]
+     [:td {:id "error"
+           :style {:font-style "italic" :color "red"}}
+      (help/error action-state)]]
     [:tr
      [:td
       (board/stock stock)
