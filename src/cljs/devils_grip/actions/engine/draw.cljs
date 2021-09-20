@@ -1,19 +1,22 @@
-(ns devils-grip.actions.engine.draw
-  (:require
-      [devils-grip.actions.engine.start :as start]))
+(ns devils-grip.actions.engine.draw)
 
-(defn advance! [action-state stock talon _]
-  ;; this fn is grody. refactor to reduce repetition 
-  (if (>= (count @stock) 3)
-    (do
-      (swap! talon #(->> (concat % (take 3 @stock))
-                         (into [])))
-      (swap! stock #(drop 3 %)))
-    (do
-      (swap! stock #(->> (concat % @talon)))
-      (start/reset-talon! talon)
-      (swap! talon #(->> (concat % (take 3 @stock))
-                         (into [])))
-      (swap! stock #(into [] (drop 3 %)))))
-  (swap! action-state (constantly {})))
+(defn draw [{:keys [stock talon] :as state-map}]
+  (-> (update state-map :talon #(into [] (concat % (take 3 stock))))
+      (update :stock #(drop 3 %))))
 
+(defmulti advance
+  (fn [{:keys [stock]}]
+    (if (>= (count stock) 3)
+      :stock-full
+      :stock-empty)))
+
+(defmethod advance :stock-full
+  [state-map]
+  (-> (draw state-map)
+      (update :action-state {})))
+
+(defmethod advance :stock-empty
+  [{:keys [stock talon] :as state-map}]
+  (-> (update state-map :stock #(->> (concat % talon)))
+      (update :talon (constantly []))
+      advance))
