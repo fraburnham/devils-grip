@@ -43,3 +43,8 @@
      (let [n (random-index (count cards))]
        (shuffle-stock (drop-nth n cards) (conj stock (nth cards n))))
      stock)))
+
+;; Not sure this really belongs in this namespace...
+(defn merge-cards [existing-cards new-cards]
+  (->> (concat existing-cards new-cards)
+       (into [])))
