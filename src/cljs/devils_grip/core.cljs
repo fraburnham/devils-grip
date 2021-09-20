@@ -9,7 +9,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Vars
 
-(defonce stock
+(defonce stock ; pack all these directly on the state-map then defonce the state map
   (reagent/atom nil))
 
 (defonce talon
@@ -21,6 +21,12 @@
 (defonce action-state
   (reagent/atom {}))
 
+(def state-map
+  {:action-state action-state ; refactor the key names to not have `-state`
+   :stock stock
+   :talon talon
+   :board-state board-state})
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Page
 
@@ -31,15 +37,17 @@
     [:tr
      [:td {:id "title"} "Devil's Grip Solitare"]]
     [:tr
-     [:td {:id "help"
-           :style {:font-style "italic"}}
-      (help/help action-state)]]
-    [:tr
      [:td {:id "board"}
       (board/board
-       (fn [] (actions/advance! action-state stock talon board-state))
+       (fn [] (actions/advance! state-map))
        (partial actions/selection-click! action-state)
-       board-state)]]
+       board-state)]
+     [:td {:id "help"
+           :style {:font-style "italic" :color "blue"}}
+      (help/help action-state)]
+     [:td {:id "error"
+           :style {:font-style "italic" :color "red"}}
+      (help/error action-state)]]
     [:tr
      [:td
       (board/stock stock)
@@ -53,46 +61,46 @@
        {:on-click
         (fn [_] ; some stuff can clearly be macros or fns
           (actions/action-click! action-state :draw)
-          (actions/advance! action-state stock talon board-state))}
+          (actions/advance! state-map))}
        "Draw"]
       [:button
        {:on-click
         (fn [_]
           (actions/action-click! action-state :from-talon)
-          (actions/advance! action-state stock talon board-state))}
+          (actions/advance! state-map))}
        "Place from talon"]
       [:button
        {:on-click
         (fn [_]
           (actions/action-click! action-state :fill-hole)
-          (actions/advance! action-state stock talon board-state))}
+          (actions/advance! state-map))}
        "Fill empty cells"]
       [:br]
       [:button
        {:on-click
         (fn [_]
           (actions/action-click! action-state :swap-cells)
-          (actions/advance! action-state stock talon board-state))}
+          (actions/advance! state-map))}
        "Swap cells"]
       [:button
        {:on-click
         (fn [_]
           (actions/action-click! action-state :merge-cells)
-          (actions/advance! action-state stock talon board-state))}
+          (actions/advance! state-map))}
        "Merge cells"]
       [:br]
       [:button
        {:on-click
         (fn [_]
           (actions/action-click! action-state :abort)
-          (actions/advance! action-state stock talon board-state))}
+          (actions/advance! state-map))}
        "Abort action"]
       [:br]
       [:button
        {:on-click
         (fn [_]
           (actions/action-click! action-state :start) ; will go to the default which clears state
-          (actions/advance! action-state stock talon board-state))}
+          (actions/advance! state-map))}
        "New game"]]]]])
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

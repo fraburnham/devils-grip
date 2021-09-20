@@ -4,7 +4,7 @@
 
 (def suits [:H :S :C :D])
 
-(def rank->value
+(def -rank->value
   {:K 13
    :Q 12
    :J 11})
@@ -43,3 +43,11 @@
      (let [n (random-index (count cards))]
        (shuffle-stock (drop-nth n cards) (conj stock (nth cards n))))
      stock)))
+
+(defn rank->value [[suit rank]]
+  (get -rank->value rank (name rank)))
+
+;; Not sure this really belongs in this namespace...
+(defn merge-cards [existing-cards new-cards]
+  (->> (concat existing-cards new-cards)
+       (into [])))

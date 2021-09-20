@@ -43,4 +43,5 @@
    "Talon: " (card (last @talon))])
 
 (defn score [stock talon]
-  (str "Score: " (+ (count @stock) (count @talon))))
+  [:span {:id "score"}
+   "Score: " (+ (count @stock) (count @talon))])
