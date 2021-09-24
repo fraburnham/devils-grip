@@ -24,5 +24,7 @@
 (defmethod advance 2
   [{:keys [action-state] :as state-map}]
   (let [[a b] (:selections action-state)]
-    (-> (update state-map :board-state merge-cells a b)
-        (update :action-state (constantly {})))))
+    (if (= a b)
+      (update state-map :action-state (constantly {}))
+      (-> (update state-map :board-state merge-cells a b)
+          (update :action-state (constantly {}))))))
