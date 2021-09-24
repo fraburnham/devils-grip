@@ -13,6 +13,7 @@
     font-size: 1em;
     width: 4em;
     height: 4.5em;
+    border: 0.1em solid black;
 }
 
 .red {
