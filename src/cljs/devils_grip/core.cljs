@@ -33,9 +33,9 @@
     [:tr
      [:td
       (board/stock state-map)
-      " " ; probably a better way to do this w/ styles
+      [:br]
       (board/talon state-map)
-      " "
+      [:br]
       (board/score state-map)]]
     [:tr
      [:td {:id "actions"}
