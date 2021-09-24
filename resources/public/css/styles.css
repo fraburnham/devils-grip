@@ -1,10 +1,17 @@
 .board {
     background-color: green;
+    display: inline-grid;
+}
+
+.row {
+    display: inline-flex;
 }
 
 .cell {
     padding: 0.3em;
     position: relative;
+    display: inline;
+    height: 11em;
 }
 
 .card {
