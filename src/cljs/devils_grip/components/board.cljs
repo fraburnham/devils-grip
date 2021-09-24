@@ -5,8 +5,11 @@
 (defn card [[suit rank]]
   (when (and suit rank)
     ^{:key {:suit suit :rank rank}}
-    [:span {:style {:color (cards/suit->color suit)}}
-     (name rank) (cards/suit->symbol suit)]))
+    [:div {:class ["card" (cards/suit->color suit)]}
+     [:div {:class "top-left"}
+      (name rank) (cards/suit->symbol suit)]
+     [:div {:class "bottom-right"}
+      (name rank) (cards/suit->symbol suit)]]))
 
 ;; these should be using maps to reduce arity
 (defn cell [advance-action! selection-click! row-num col-num cell-cards]
