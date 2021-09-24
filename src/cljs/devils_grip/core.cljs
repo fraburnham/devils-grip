@@ -2,6 +2,7 @@
   (:require
    [reagent.core :as reagent]
    [devils-grip.actions.engine :as actions]
+   [devils-grip.components.action :as action]
    [devils-grip.board :as board] ; this and help should probably be in a `components` namespace for easier navigation (should put the page there, too)
    [devils-grip.cards :as cards]
    [devils-grip.help :as help]))
@@ -57,45 +58,15 @@
       (board/score stock talon)]]
     [:tr
      [:td {:id "actions"}
-      [:button
-       {:on-click
-        (fn [_] ; some stuff can clearly be macros or fns
-          (actions/action-click! action-state :draw)
-          (actions/advance! state-map))}
-       "Draw"]
-      [:button
-       {:on-click
-        (fn [_]
-          (actions/action-click! action-state :from-talon)
-          (actions/advance! state-map))}
-       "Place from talon"]
+      (action/button state-map :draw "Draw")
+      (action/button state-map :from-talon "Place from talon")
       [:br]
-      [:button
-       {:on-click
-        (fn [_]
-          (actions/action-click! action-state :swap-cells)
-          (actions/advance! state-map))}
-       "Swap cells"]
-      [:button
-       {:on-click
-        (fn [_]
-          (actions/action-click! action-state :merge-cells)
-          (actions/advance! state-map))}
-       "Merge cells"]
+      (action/button state-map :swap-cells "Swap cells")
+      (action/button state-map :merge-cells "Merge cells")
       [:br]
-      [:button
-       {:on-click
-        (fn [_]
-          (actions/action-click! action-state :abort)
-          (actions/advance! state-map))}
-       "Abort action"]
+      (action/button state-map :abort "Abort action")
       [:br]
-      [:button
-       {:on-click
-        (fn [_]
-          (actions/action-click! action-state :start) ; will go to the default which clears state
-          (actions/advance! state-map))}
-       "New game"]]]]])
+      (action/button state-map :start "New game")]]]])
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Initialize App
