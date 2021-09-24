@@ -1,7 +1,7 @@
 (defproject devils-grip "0.1.0-SNAPSHOT"
   :dependencies [[org.clojure/clojure "1.8.0"]
                  [org.clojure/clojurescript "1.9.946"]
-                 [reagent "0.7.0"]]
+                 [reagent "0.8.0"]]
 
   :min-lein-version "2.5.3"
 
