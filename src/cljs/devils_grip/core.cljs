@@ -17,7 +17,7 @@
   [:table
    [:tbody
     [:tr
-     [:td {:id "title"} "Devil's Grip Solitare"]]
+     [:td {:id "title"} "Devil's Grip Solitaire"]]
     [:tr
      [:td {:id "board"}
       (board/board
