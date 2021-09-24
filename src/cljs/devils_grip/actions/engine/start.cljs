@@ -1,6 +1,6 @@
 (ns devils-grip.actions.engine.start
   (:require
-   [devils-grip.components.cards :as cards]))
+   [devils-grip.cards :as cards]))
 
 (defn board-setup [stock]
   (->> (take 24 stock)

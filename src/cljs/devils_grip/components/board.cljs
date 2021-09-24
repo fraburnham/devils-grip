@@ -1,6 +1,6 @@
 (ns devils-grip.components.board
   (:require
-   [devils-grip.components.cards :as cards]))
+   [devils-grip.cards :as cards]))
 
 (defn card [[suit rank]]
   (when (and suit rank)

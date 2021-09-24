@@ -1,6 +1,6 @@
 (ns devils-grip.actions.engine.merge-cells
   (:require
-   [devils-grip.components.cards :as cards]))
+   [devils-grip.cards :as cards]))
 
 ;; `source` and `target` should look like [row-num col-num]
 (defn merge-cells [board source target]
