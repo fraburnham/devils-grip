@@ -1,6 +1,6 @@
 (ns devils-grip.rules
   (:require
-   [devils-grip.cards :as cards]))
+   [devils-grip.components.cards :as cards]))
 
 (defn valid-gap? [cards]
   ;; It seems like there should be a way to do this with a built-in and avoid recursion...

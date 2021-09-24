@@ -3,21 +3,14 @@
    [reagent.core :as reagent]
    [devils-grip.actions.engine :as actions]
    [devils-grip.components.action :as action]
-   [devils-grip.board :as board] ; this and help should probably be in a `components` namespace for easier navigation (should put the page there, too)
-   [devils-grip.cards :as cards]
-   [devils-grip.help :as help]))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Vars
+   [devils-grip.components.board :as board]
+   [devils-grip.components.help :as help]))
 
 (defonce state-map
   {:action-state (reagent/atom {}) ; refactor the key names to not have `-state`
    :stock (reagent/atom nil)
    :talon (reagent/atom [])
    :board-state (reagent/atom [])})
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Page
 
 (defn page [ratom]
   ;; divs may be nicer but tables are easy
@@ -55,9 +48,6 @@
       (action/button state-map :abort "Abort action")
       [:br]
       (action/button state-map :start "New game")]]]])
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Initialize App
 
 (defn dev-setup []
   (when ^boolean js/goog.DEBUG
