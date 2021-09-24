@@ -14,7 +14,7 @@
 ;; these should be using maps to reduce arity
 (defn cell [advance-action! selection-click! row-num col-num cell-cards]
   ^{:key {:row row-num :cell col-num}}
-  [:td {:style {:border "1px solid black"} ; style should be applied using classes to keep the code clearer
+  [:td {:class "cell"
         :id (str "row-" row-num "-col-" col-num)
         :on-click (fn [_]
                     (selection-click! [row-num col-num])
