@@ -10,23 +10,11 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Vars
 
-(defonce stock ; pack all these directly on the state-map then defonce the state map
-  (reagent/atom nil))
-
-(defonce talon
-  (reagent/atom []))
-
-(defonce board-state
-  (reagent/atom []))
-
-(defonce action-state
-  (reagent/atom {}))
-
-(def state-map
-  {:action-state action-state ; refactor the key names to not have `-state`
-   :stock stock
-   :talon talon
-   :board-state board-state})
+(defonce state-map
+  {:action-state (reagent/atom {}) ; refactor the key names to not have `-state`
+   :stock (reagent/atom nil)
+   :talon (reagent/atom [])
+   :board-state (reagent/atom [])})
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Page
@@ -41,21 +29,21 @@
      [:td {:id "board"}
       (board/board
        (fn [] (actions/advance! state-map))
-       (partial actions/selection-click! action-state)
-       board-state)]
+       (partial actions/selection-click! state-map)
+       state-map)]
      [:td {:id "help"
            :style {:font-style "italic" :color "blue"}}
-      (help/help action-state)]
+      (help/help (:action-state state-map))]
      [:td {:id "error"
            :style {:font-style "italic" :color "red"}}
-      (help/error action-state)]]
+      (help/error (:action-state state-map))]]
     [:tr
      [:td
-      (board/stock stock)
+      (board/stock state-map)
       " " ; probably a better way to do this w/ styles
-      (board/talon talon)
+      (board/talon state-map)
       " "
-      (board/score stock talon)]]
+      (board/score state-map)]]
     [:tr
      [:td {:id "actions"}
       (action/button state-map :draw "Draw")
