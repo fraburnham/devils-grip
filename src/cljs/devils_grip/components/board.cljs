@@ -30,7 +30,7 @@
         (range))])
 
 (defn board [advance-action! selection-click! {:keys [board-state]}]
-  [:table {:style {:background-color "green"}}
+  [:table {:class ["board"]}
    [:tbody
     (map (fn [row-data row-num]
            (row advance-action! selection-click! row-num row-data))
