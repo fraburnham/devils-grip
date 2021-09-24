@@ -2,10 +2,12 @@
   (:require
    [devils-grip.cards :as cards]))
 
-(defn card [[suit rank]]
+(defn card [[suit rank] offset]
   (when (and suit rank)
     ^{:key {:suit suit :rank rank}}
-    [:div {:class ["card" (cards/suit->color suit)]}
+    [:div {:class ["card" (cards/suit->color suit)]
+           :style {:z-index offset
+                   :top (str "-" (* offset 3.5) "em")}}
      [:div {:class "top-left"}
       (name rank) (cards/suit->symbol suit)]
      [:div {:class "bottom-right"}
@@ -19,7 +21,7 @@
         :on-click (fn [_]
                     (selection-click! [row-num col-num])
                     (advance-action!))}
-   (map #(card %) cell-cards)])
+   (map #(card %1 %2) cell-cards (range))])
 
 (defn row [advance-action! selection-click! row-num row]
   ^{:key {:row row-num}}
@@ -43,7 +45,7 @@
 
 (defn talon [{:keys [talon]}]
   [:span {:id "talon"}
-   "Talon: " (card (last @talon))])
+   "Talon: " (card (last @talon) 0)])
 
 (defn score [{:keys [stock talon] :as state-map}]
   [:span {:id "score"}
