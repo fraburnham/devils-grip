@@ -18,7 +18,7 @@
   (doseq [[k v] new-state]
     (swap! (old-state k) (constantly v))))
 
-(defn selection-click! [action-state selection]
+(defn selection-click! [{:keys [action-state]} selection]
   (swap! action-state #(update % :selections conj selection)))
 
 (defn action-click! [action-state type]
@@ -26,7 +26,7 @@
   (swap! action-state #(assoc % :type type)))
 
 (defmulti advance
-  (fn [{:keys [action-state stock talon board-state] :as state-map}]
+  (fn [{:keys [action-state]}]
     (:type action-state)))
 
 (defmethod advance :draw
@@ -43,7 +43,10 @@
 
 (defmethod advance :merge-cells
   [state-map]
-  (merge-cells/advance state-map))
+  (let [state-map (merge-cells/advance state-map)]
+    (if (empty? (:action-state state-map))
+      (advance (assoc-in state-map [:action-state :type] :fill-hole))
+      state-map)))
 
 (defmethod advance :start
   [state-map]

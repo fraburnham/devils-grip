@@ -1,6 +1,6 @@
-(ns devils-grip.board
+(ns devils-grip.components.board
   (:require
-   [devils-grip.cards :as cards]))
+   [devils-grip.components.cards :as cards]))
 
 (defn card [[suit rank]]
   (when (and suit rank)
@@ -26,7 +26,7 @@
         row
         (range))])
 
-(defn board [advance-action! selection-click! board-state]
+(defn board [advance-action! selection-click! {:keys [board-state]}]
   [:table {:style {:background-color "green"}}
    [:tbody
     (map (fn [row-data row-num]
@@ -34,14 +34,14 @@
          @board-state
          (range))]])
 
-(defn stock [stock]
+(defn stock [{:keys [stock]}]
   [:span {:id "stock"}
    "Stock: " (count @stock)])
 
-(defn talon [talon]
+(defn talon [{:keys [talon]}]
   [:span {:id "talon"}
    "Talon: " (card (last @talon))])
 
-(defn score [stock talon]
+(defn score [{:keys [stock talon] :as state-map}]
   [:span {:id "score"}
    "Score: " (+ (count @stock) (count @talon))])

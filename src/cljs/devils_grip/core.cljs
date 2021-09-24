@@ -2,33 +2,15 @@
   (:require
    [reagent.core :as reagent]
    [devils-grip.actions.engine :as actions]
-   [devils-grip.board :as board] ; this and help should probably be in a `components` namespace for easier navigation (should put the page there, too)
-   [devils-grip.cards :as cards]
-   [devils-grip.help :as help]))
+   [devils-grip.components.action :as action]
+   [devils-grip.components.board :as board]
+   [devils-grip.components.help :as help]))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Vars
-
-(defonce stock ; pack all these directly on the state-map then defonce the state map
-  (reagent/atom nil))
-
-(defonce talon
-  (reagent/atom []))
-
-(defonce board-state
-  (reagent/atom []))
-
-(defonce action-state
-  (reagent/atom {}))
-
-(def state-map
-  {:action-state action-state ; refactor the key names to not have `-state`
-   :stock stock
-   :talon talon
-   :board-state board-state})
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Page
+(defonce state-map
+  {:action-state (reagent/atom {}) ; refactor the key names to not have `-state`
+   :stock (reagent/atom nil)
+   :talon (reagent/atom [])
+   :board-state (reagent/atom [])})
 
 (defn page [ratom]
   ;; divs may be nicer but tables are easy
@@ -40,71 +22,32 @@
      [:td {:id "board"}
       (board/board
        (fn [] (actions/advance! state-map))
-       (partial actions/selection-click! action-state)
-       board-state)]
+       (partial actions/selection-click! state-map)
+       state-map)]
      [:td {:id "help"
            :style {:font-style "italic" :color "blue"}}
-      (help/help action-state)]
+      (help/help (:action-state state-map))]
      [:td {:id "error"
            :style {:font-style "italic" :color "red"}}
-      (help/error action-state)]]
+      (help/error (:action-state state-map))]]
     [:tr
      [:td
-      (board/stock stock)
+      (board/stock state-map)
       " " ; probably a better way to do this w/ styles
-      (board/talon talon)
+      (board/talon state-map)
       " "
-      (board/score stock talon)]]
+      (board/score state-map)]]
     [:tr
      [:td {:id "actions"}
-      [:button
-       {:on-click
-        (fn [_] ; some stuff can clearly be macros or fns
-          (actions/action-click! action-state :draw)
-          (actions/advance! state-map))}
-       "Draw"]
-      [:button
-       {:on-click
-        (fn [_]
-          (actions/action-click! action-state :from-talon)
-          (actions/advance! state-map))}
-       "Place from talon"]
-      [:button
-       {:on-click
-        (fn [_]
-          (actions/action-click! action-state :fill-hole)
-          (actions/advance! state-map))}
-       "Fill empty cells"]
+      (action/button state-map :draw "Draw")
+      (action/button state-map :from-talon "Place from talon")
       [:br]
-      [:button
-       {:on-click
-        (fn [_]
-          (actions/action-click! action-state :swap-cells)
-          (actions/advance! state-map))}
-       "Swap cells"]
-      [:button
-       {:on-click
-        (fn [_]
-          (actions/action-click! action-state :merge-cells)
-          (actions/advance! state-map))}
-       "Merge cells"]
+      (action/button state-map :swap-cells "Swap cells")
+      (action/button state-map :merge-cells "Merge cells")
       [:br]
-      [:button
-       {:on-click
-        (fn [_]
-          (actions/action-click! action-state :abort)
-          (actions/advance! state-map))}
-       "Abort action"]
+      (action/button state-map :abort "Abort action")
       [:br]
-      [:button
-       {:on-click
-        (fn [_]
-          (actions/action-click! action-state :start) ; will go to the default which clears state
-          (actions/advance! state-map))}
-       "New game"]]]]])
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Initialize App
+      (action/button state-map :start "New game")]]]])
 
 (defn dev-setup []
   (when ^boolean js/goog.DEBUG

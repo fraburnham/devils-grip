@@ -1,6 +1,6 @@
 (ns devils-grip.actions.engine.from-talon
   (:require
-   [devils-grip.cards :as cards]))
+   [devils-grip.components.cards :as cards]))
 
 (defn talon->board [board-state action-state talon]
   (let [target (first (:selections action-state))]
