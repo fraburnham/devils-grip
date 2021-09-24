@@ -43,7 +43,10 @@
 
 (defmethod advance :merge-cells
   [state-map]
-  (merge-cells/advance state-map))
+  (let [state-map (merge-cells/advance state-map)]
+    (if (empty? (:action-state state-map))
+      (advance (assoc-in state-map [:action-state :type] :fill-hole))
+      state-map)))
 
 (defmethod advance :start
   [state-map]

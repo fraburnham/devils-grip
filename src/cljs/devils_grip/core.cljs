@@ -69,12 +69,6 @@
           (actions/action-click! action-state :from-talon)
           (actions/advance! state-map))}
        "Place from talon"]
-      [:button
-       {:on-click
-        (fn [_]
-          (actions/action-click! action-state :fill-hole)
-          (actions/advance! state-map))}
-       "Fill empty cells"]
       [:br]
       [:button
        {:on-click
