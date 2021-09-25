@@ -1,6 +1,6 @@
 (ns devils-grip.actions.engine.merge-cells
   (:require
-   [devils-grip.components.cards :as cards]))
+   [devils-grip.cards :as cards]))
 
 ;; `source` and `target` should look like [row-num col-num]
 (defn merge-cells [board source target]
@@ -24,5 +24,7 @@
 (defmethod advance 2
   [{:keys [action-state] :as state-map}]
   (let [[a b] (:selections action-state)]
-    (-> (update state-map :board-state merge-cells a b)
-        (update :action-state (constantly {})))))
+    (if (= a b)
+      (update state-map :action-state (constantly {}))
+      (-> (update state-map :board-state merge-cells a b)
+          (update :action-state (constantly {}))))))

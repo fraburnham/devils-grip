@@ -1,0 +1,40 @@
+.board {
+    background-color: green;
+    display: inline-grid;
+}
+
+.row {
+    display: inline-flex;
+}
+
+.cell {
+    padding: 0.3em;
+    position: relative;
+    display: inline;
+    height: 11em;
+}
+
+.card {
+    background-color: white;
+    border-radius: 0.5em;
+    padding: 0.3em;
+    font-size: 1em;
+    width: 4em;
+    height: 4.5em;
+    border: 0.1em solid black;
+    position: relative;
+}
+
+.red {
+    color: red;
+}
+
+.black {
+    color: black;
+}
+
+.bottom-right {
+    transform: rotate(180deg);
+    position: relative;
+    top: 2.25em;
+}

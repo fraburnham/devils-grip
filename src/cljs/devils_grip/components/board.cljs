@@ -1,38 +1,43 @@
 (ns devils-grip.components.board
   (:require
-   [devils-grip.components.cards :as cards]))
+   [devils-grip.cards :as cards]))
 
-(defn card [[suit rank]]
+(defn card [[suit rank] offset]
   (when (and suit rank)
     ^{:key {:suit suit :rank rank}}
-    [:span {:style {:color (cards/suit->color suit)}}
-     (name rank) (cards/suit->symbol suit)]))
+    [:div {:class ["card" (cards/suit->color suit)]
+           :style {:z-index offset
+                   :top (str "-" (* offset 3.5) "em")}}
+     [:div {:class "top-left"}
+      (name rank) (cards/suit->symbol suit)]
+     [:div {:class "bottom-right"}
+      (name rank) (cards/suit->symbol suit)]]))
 
 ;; these should be using maps to reduce arity
 (defn cell [advance-action! selection-click! row-num col-num cell-cards]
   ^{:key {:row row-num :cell col-num}}
-  [:td {:style {:border "1px solid black"} ; style should be applied using classes to keep the code clearer
+  [:div {:class "cell"
         :id (str "row-" row-num "-col-" col-num)
         :on-click (fn [_]
                     (selection-click! [row-num col-num])
                     (advance-action!))}
-   (map #(card %) cell-cards)])
+   (map #(card %1 %2) cell-cards (range))])
 
 (defn row [advance-action! selection-click! row-num row]
   ^{:key {:row row-num}}
-  [:tr {:id (str "row-" row-num)}
+  [:div {:id (str "row-" row-num)
+         :class "row"}
    (map (fn [cell-data col-num]
           (cell advance-action! selection-click! row-num col-num cell-data))
         row
         (range))])
 
 (defn board [advance-action! selection-click! {:keys [board-state]}]
-  [:table {:style {:background-color "green"}}
-   [:tbody
-    (map (fn [row-data row-num]
-           (row advance-action! selection-click! row-num row-data))
-         @board-state
-         (range))]])
+  [:div {:class ["board"]}
+   (map (fn [row-data row-num]
+          (row advance-action! selection-click! row-num row-data))
+        @board-state
+        (range))])
 
 (defn stock [{:keys [stock]}]
   [:span {:id "stock"}
@@ -40,7 +45,7 @@
 
 (defn talon [{:keys [talon]}]
   [:span {:id "talon"}
-   "Talon: " (card (last @talon))])
+   "Talon: " (card (last @talon) 0)])
 
 (defn score [{:keys [stock talon] :as state-map}]
   [:span {:id "score"}

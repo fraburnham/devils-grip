@@ -17,27 +17,13 @@
   [:table
    [:tbody
     [:tr
-     [:td {:id "title"} "Devil's Grip Solitare"]]
+     [:td {:id "title"} "Devil's Grip Solitaire"]]
     [:tr
      [:td {:id "board"}
       (board/board
        (fn [] (actions/advance! state-map))
        (partial actions/selection-click! state-map)
        state-map)]
-     [:td {:id "help"
-           :style {:font-style "italic" :color "blue"}}
-      (help/help (:action-state state-map))]
-     [:td {:id "error"
-           :style {:font-style "italic" :color "red"}}
-      (help/error (:action-state state-map))]]
-    [:tr
-     [:td
-      (board/stock state-map)
-      " " ; probably a better way to do this w/ styles
-      (board/talon state-map)
-      " "
-      (board/score state-map)]]
-    [:tr
      [:td {:id "actions"}
       (action/button state-map :draw "Draw")
       (action/button state-map :from-talon "Place from talon")
@@ -47,7 +33,22 @@
       [:br]
       (action/button state-map :abort "Abort action")
       [:br]
-      (action/button state-map :start "New game")]]]])
+      (action/button state-map :start "New game")]]
+    [:tr
+     [:td
+      [:div
+       [:span {:id "help"
+               :style {:font-style "italic" :color "blue"}}
+        (help/help (:action-state state-map))]
+       [:span {:id "error"
+               :style {:font-style "italic" :color "red"}}
+        (help/error (:action-state state-map))]]
+      [:div
+       (board/stock state-map)
+       [:br]
+       (board/talon state-map)
+       [:br]
+       (board/score state-map)]]]]])
 
 (defn dev-setup []
   (when ^boolean js/goog.DEBUG
